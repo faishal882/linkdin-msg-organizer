@@ -8,16 +8,17 @@ import ErrorScreen from "@/components/errorscreen";
 import { fetchMessages } from "@/utils/fetchmessages";
 import "./App.css";
 
-const App = () => {
-  interface Chat {
-    name: string;
-    messages: string[];
-  }
+interface Chat {
+  name: string;
+  thread_url: string;
+  messages: string[];
+}
 
+const App = () => {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
-  const [chats, setChats] = useState<{ name: string; messages: string[] }[]>(
-    []
-  );
+  const [chats, setChats] = useState<
+    { name: string; thread_url: string; messages: string[] }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +60,11 @@ const App = () => {
             />
           )}
           {!loading && !error && (
-            <ChatList onSelectChat={setSelectedChat} chats={chats} />
+            <ChatList
+              onSelectChat={setSelectedChat}
+              chats={chats}
+              hardRefresh={() => loadMessages(true)}
+            />
           )}
         </>
       )}

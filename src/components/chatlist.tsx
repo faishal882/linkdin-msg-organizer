@@ -1,11 +1,17 @@
+// src/components/chatlist.tsx
 "use client";
-
 import type React from "react";
+import { FiSettings } from "react-icons/fi";
 import "./stylesheets/chatlist.css";
 
 interface ChatListProps {
-  onSelectChat: (chat: { name: string; messages: string[] }) => void;
-  chats: { name: string; messages: string[] }[];
+  onSelectChat: (chat: {
+    name: string;
+    thread_url: string;
+    messages: string[];
+  }) => void;
+  chats: { name: string; thread_url: string; messages: string[] }[];
+  hardRefresh: () => void;
 }
 
 const MAX_MESSAGE_LENGTH = 30;
@@ -17,7 +23,11 @@ const truncateMessage = (message: string) => {
   return message;
 };
 
-const ChatList: React.FC<ChatListProps> = ({ onSelectChat, chats }) => {
+const ChatList: React.FC<ChatListProps> = ({
+  onSelectChat,
+  chats,
+  hardRefresh,
+}) => {
   return (
     <div className="chatlist-container">
       {/* Header Section */}
@@ -27,9 +37,10 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, chats }) => {
           <option>Unread</option>
           <option>Archived</option>
         </select>
-        <button className="chatlist-settings">Settings</button>
+        <button className="chatlist-settings">
+          <FiSettings />
+        </button>
       </div>
-
       {/* Chat List Items */}
       {chats && chats.length > 0 ? (
         chats.map(
@@ -57,6 +68,10 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, chats }) => {
       ) : (
         <div className="chatlist-empty">No messages found</div>
       )}
+      {/* Full-width Button */}
+      <button className="full-width-button" onClick={hardRefresh}>
+        Hard Refresh
+      </button>
     </div>
   );
 };

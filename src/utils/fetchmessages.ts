@@ -1,13 +1,14 @@
 interface CachedData {
   conversations: Array<{
     username: string;
+    thread_url: string;
     messages: string[];
   }>;
   timestamp: number;
 }
 
 const CACHE_KEY = "linkedin_messages_cache";
-const CACHE_EXPIRATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+const CACHE_EXPIRATION = 30 * 60 * 1000; // 5 minutes in milliseconds
 
 // Add these new utility functions
 const loadFromCache = (): CachedData | null => {
@@ -34,7 +35,9 @@ const saveToCache = (data: ApiResponse) => {
 
 // Updated fetchMessages function
 export const fetchMessages = async (
-  setChats: (chats: { name: string; messages: string[] }[]) => void,
+  setChats: (
+    chats: { name: string; thread_url: string; messages: string[] }[]
+  ) => void,
   setError: (error: string) => void,
   setLoading: (loading: boolean) => void,
   forceRefresh = false // Add this parameter
@@ -49,6 +52,7 @@ export const fetchMessages = async (
       setChats(
         cachedData.conversations.map((conv) => ({
           name: conv.username,
+          thread_url: conv.thread_url,
           messages: conv.messages,
         }))
       );
