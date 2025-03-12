@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 import "./stylesheets/chat.css";
 
 interface ChatProps {
@@ -10,7 +9,6 @@ interface ChatProps {
   goBack: () => void;
 }
 
-// src/components/chat.tsx
 const ChatComponent: React.FC<ChatProps> = ({ chat, goBack }) => {
   return (
     <div className="chat-container">
@@ -18,9 +16,19 @@ const ChatComponent: React.FC<ChatProps> = ({ chat, goBack }) => {
         <button className="back-button" onClick={goBack}>
           ← Back
         </button>
-        <div>{chat.name}</div>
+        <div className="chat-title">{chat.name}</div>
       </div>
-      {/* ... rest of component ... */}
+
+      <div className="chat-messages">
+        {chat.messages.map((msg: string, index) => (
+          <div
+            key={index}
+            className={`chat-bubble ${index % 2 === 0 ? "user" : "ai"}`}
+          >
+            {msg}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -19,11 +19,9 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // src/entrypoints/popup/App.tsx
-  const loadMessages = async () => {
-    setError(null); // Reset error state
-    setLoading(true);
-    await fetchMessages(setChats, setError, setLoading);
+  const loadMessages = async (force = false) => {
+    setError(null);
+    await fetchMessages(setChats, setError, setLoading, force);
   };
 
   useEffect(() => {
@@ -41,7 +39,10 @@ const App = () => {
         <>
           {loading && <LoadingScreen />}
           {error && (
-            <ErrorScreen message={error} retryFunction={loadMessages} />
+            <ErrorScreen
+              message={error}
+              retryFunction={() => loadMessages(true)} // Force refresh
+            />
           )}
           {!loading && !error && (
             <ChatList onSelectChat={setSelectedChat} chats={chats} />

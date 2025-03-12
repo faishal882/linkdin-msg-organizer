@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-
+import React from "react";
 import "./stylesheets/chatlist.css";
 
 interface ChatListProps {
@@ -7,9 +6,16 @@ interface ChatListProps {
   chats: { name: string; messages: string[] }[];
 }
 
+const MAX_MESSAGE_LENGTH = 30; // Characters to show before truncating
+
+const truncateMessage = (message: string) => {
+  if (message.length > MAX_MESSAGE_LENGTH) {
+    return `${message.substring(0, MAX_MESSAGE_LENGTH)}...`;
+  }
+  return message;
+};
+
 const ChatList: React.FC<ChatListProps> = ({ onSelectChat, chats }) => {
-
-
   return (
     <div className="chatlist-container">
       {/* Header Section */}
@@ -24,23 +30,26 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, chats }) => {
 
       {/* Chat List Items */}
       {chats &&
-        chats.map((chat, index) => (
-          <div
-            key={index}
-            className="chatlist-item"
-            onClick={() => onSelectChat(chat)}
-          >
-            <div className="chatlist-icon">👤</div>
-            <div className="chatlist-info">
-              <div className="chatlist-header">
-                <span className="chatlist-name">{chat.name}</span>
+        chats.map(
+          (chat, index) =>
+            chat.messages.length > 0 && (
+              <div
+                key={index}
+                className="chatlist-item"
+                onClick={() => onSelectChat(chat)}
+              >
+                <div className="chatlist-icon">👤</div>
+                <div className="chatlist-info">
+                  <div className="chatlist-header">
+                    <span className="chatlist-name">{chat.name}</span>
+                  </div>
+                  <div className="chatlist-message">
+                    {truncateMessage(chat.messages[0] || "No messages yet")}
+                  </div>
+                </div>
               </div>
-              <div className="chatlist-message">
-                {chat.messages[0] || "No messages yet"}
-              </div>
-            </div>
-          </div>
-        ))}
+            )
+        )}
     </div>
   );
 };

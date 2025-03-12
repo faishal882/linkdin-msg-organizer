@@ -1,37 +1,48 @@
+/* src/components/stylesheets/chat.css */
 .chat-container {
   width: 350px;
+  height: 400px;
   background-color: #292929;
-  padding: 12px;
+  display: flex;
+  flex-direction: column;
   border-radius: 10px;
 }
 
 .chat-header {
+  padding: 12px;
+  background-color: #3b3b3b;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-size: 18px;
-  color: white;
-  margin-bottom: 10px;
+  border-radius: 10px 10px 0 0;
 }
 
 .back-button {
   background: none;
   border: none;
   color: white;
-  font-size: 18px;
+  font-size: 16px;
+  margin-right: 8px;
   cursor: pointer;
 }
 
+.chat-title {
+  color: white;
+  font-weight: bold;
+}
+
 .chat-messages {
-  height: 300px;
+  flex: 1;
+  padding: 12px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .chat-bubble {
-  max-width: 75%;
-  padding: 8px;
-  margin-bottom: 5px;
-  border-radius: 8px;
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 12px;
   color: white;
 }
 
@@ -43,21 +54,4 @@
 .ai {
   background-color: #545454;
   align-self: flex-start;
-}
-
-.chat-input {
-  display: flex;
-  margin-top: 10px;
-}
-
-.chat-input input {
-  flex: 1;
-  background-color: transparent;
-  border: 1px solid #444;
-  color: white;
-}
-
-.chat-input button {
-  background-color: #666;
-  color: white;
 }
