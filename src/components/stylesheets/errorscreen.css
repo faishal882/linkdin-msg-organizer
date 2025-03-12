@@ -9,6 +9,8 @@
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
   padding: 0 24px;
+  min-width: 350px;
+  min-height: 350px;
 }
 
 .error-title {

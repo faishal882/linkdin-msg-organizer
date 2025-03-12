@@ -5,6 +5,8 @@
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+  min-width: 350px;
+  min-height: 350px;
 }
 
 .chatlist-header {
