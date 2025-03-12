@@ -11,13 +11,17 @@ const App = () => {
     name: string;
     messages: string[];
   }
-  
+
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
-  const [chats, setChats] = useState<{ name: string; messages: string[] }[]>([]);
+  const [chats, setChats] = useState<{ name: string; messages: string[] }[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // src/entrypoints/popup/App.tsx
   const loadMessages = async () => {
+    setError(null); // Reset error state
     setLoading(true);
     await fetchMessages(setChats, setError, setLoading);
   };
@@ -37,10 +41,7 @@ const App = () => {
         <>
           {loading && <LoadingScreen />}
           {error && (
-            <ErrorScreen
-              message={error}
-              retryFunction={loadMessages}
-            />
+            <ErrorScreen message={error} retryFunction={loadMessages} />
           )}
           {!loading && !error && (
             <ChatList onSelectChat={setSelectedChat} chats={chats} />

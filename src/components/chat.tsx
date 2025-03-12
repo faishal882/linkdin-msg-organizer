@@ -10,19 +10,17 @@ interface ChatProps {
   goBack: () => void;
 }
 
-const ChatComponent: React.FC<ChatProps> = ({ chat }) => {
-
-
+// src/components/chat.tsx
+const ChatComponent: React.FC<ChatProps> = ({ chat, goBack }) => {
   return (
     <div className="chat-container">
-      {chat.messages.map((msg: string, index) => (
-        <div
-          key={index}
-          className={`message ${index % 2 === 0 ? "user" : "ai"}`}
-        >
-          {msg}
-        </div>
-      ))}
+      <div className="chat-header">
+        <button className="back-button" onClick={goBack}>
+          ← Back
+        </button>
+        <div>{chat.name}</div>
+      </div>
+      {/* ... rest of component ... */}
     </div>
   );
 };
