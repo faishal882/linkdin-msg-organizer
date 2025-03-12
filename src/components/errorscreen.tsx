@@ -1,5 +1,7 @@
-import React from "react";
-import "./stylesheets/errorscreen.css"; // CSS file for styling
+"use client";
+
+import type React from "react";
+import "./stylesheets/errorscreen.css";
 
 interface ErrorScreenProps {
   message: string;
@@ -12,10 +14,10 @@ const ErrorScreen: React.FC<ErrorScreenProps> = ({
 }) => {
   return (
     <div className="error-container">
-      <h2 className="error-title">❌ Error</h2>
+      <h2 className="error-title">Unable to Load Messages</h2>
       <p className="error-message">{message}</p>
       <button onClick={retryFunction} className="retry-button">
-        Retry
+        Try Again
       </button>
     </div>
   );

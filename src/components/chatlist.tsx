@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import type React from "react";
 import "./stylesheets/chatlist.css";
 
 interface ChatListProps {
@@ -6,7 +8,7 @@ interface ChatListProps {
   chats: { name: string; messages: string[] }[];
 }
 
-const MAX_MESSAGE_LENGTH = 30; // Characters to show before truncating
+const MAX_MESSAGE_LENGTH = 30;
 
 const truncateMessage = (message: string) => {
   if (message.length > MAX_MESSAGE_LENGTH) {
@@ -21,15 +23,15 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, chats }) => {
       {/* Header Section */}
       <div className="chatlist-header">
         <select className="chatlist-dropdown">
-          <option>All Chats</option>
-          <option>Unread Messages</option>
+          <option>All Messages</option>
+          <option>Unread</option>
           <option>Archived</option>
         </select>
-        <button className="chatlist-settings">⚙️ Settings</button>
+        <button className="chatlist-settings">Settings</button>
       </div>
 
       {/* Chat List Items */}
-      {chats &&
+      {chats && chats.length > 0 ? (
         chats.map(
           (chat, index) =>
             chat.messages.length > 0 && (
@@ -38,7 +40,9 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, chats }) => {
                 className="chatlist-item"
                 onClick={() => onSelectChat(chat)}
               >
-                <div className="chatlist-icon">👤</div>
+                <div className="chatlist-icon">
+                  {chat.name.charAt(0).toUpperCase()}
+                </div>
                 <div className="chatlist-info">
                   <div className="chatlist-header">
                     <span className="chatlist-name">{chat.name}</span>
@@ -49,7 +53,10 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat, chats }) => {
                 </div>
               </div>
             )
-        )}
+        )
+      ) : (
+        <div className="chatlist-empty">No messages found</div>
+      )}
     </div>
   );
 };

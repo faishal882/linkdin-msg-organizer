@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import ChatComponent from "@/components/chat";
 import ChatList from "@/components/chatlist";
@@ -27,6 +29,18 @@ const App = () => {
   useEffect(() => {
     loadMessages();
   }, []);
+
+  // Reset selectedChat if chats array changes and selectedChat is no longer valid
+  useEffect(() => {
+    if (selectedChat && chats.length > 0) {
+      const chatStillExists = chats.some(
+        (chat) => chat.name === selectedChat.name
+      );
+      if (!chatStillExists) {
+        setSelectedChat(null);
+      }
+    }
+  }, [chats, selectedChat]);
 
   return (
     <div className="app-container">
