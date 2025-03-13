@@ -66,21 +66,30 @@ const ChatComponent: React.FC<ChatProps> = ({ chat, goBack }) => {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-grow overflow-y-auto">
-        {chat.messages && chat.messages.length > 0 ? (
-          chat.messages.map((msg, index) => (
-            <div
-              key={index}
-              className="p-4 bg-white rounded-lg shadow-md mb-2 max-w-[80%] text-gray-800 break-words"
-            >
-              {msg}
+      <div
+        className="flex-grow overflow-y-auto"
+        style={{
+          scrollbarWidth: "none", // For Firefox
+          msOverflowStyle: "none", // For Internet Explorer and Edge
+        }}
+      >
+        {/* Hide scrollbar for Webkit browsers (Chrome, Safari) */}
+        <div className="pr-2">
+          {chat.messages && chat.messages.length > 0 ? (
+            chat.messages.map((msg, index) => (
+              <div
+                key={index}
+                className="p-4 bg-white rounded-lg shadow-md mb-2 max-w-[80%] text-gray-800 break-words"
+              >
+                {msg}
+              </div>
+            ))
+          ) : (
+            <div className="flex-grow flex items-center justify-center text-gray-500">
+              No messages in this conversation
             </div>
-          ))
-        ) : (
-          <div className="flex-grow flex items-center justify-center text-gray-500">
-            No messages in this conversation
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Reply Button */}

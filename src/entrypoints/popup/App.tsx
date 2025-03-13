@@ -12,12 +12,13 @@ interface Chat {
   name: string;
   thread_url: string;
   messages: string[];
+  label: string;
 }
 
 const App = () => {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [chats, setChats] = useState<
-    { name: string; thread_url: string; messages: string[] }[]
+    { name: string; thread_url: string; messages: string[]; label: string }[]
   >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

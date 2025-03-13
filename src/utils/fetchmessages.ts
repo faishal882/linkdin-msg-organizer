@@ -3,6 +3,7 @@ interface CachedData {
     username: string;
     thread_url: string;
     messages: string[];
+    label: string;
   }>;
   timestamp: number;
 }
@@ -36,7 +37,7 @@ const saveToCache = (data: ApiResponse) => {
 // Updated fetchMessages function
 export const fetchMessages = async (
   setChats: (
-    chats: { name: string; thread_url: string; messages: string[] }[]
+    chats: { name: string; thread_url: string; messages: string[]; label: string }[]
   ) => void,
   setError: (error: string) => void,
   setLoading: (loading: boolean) => void,
@@ -54,6 +55,7 @@ export const fetchMessages = async (
           name: conv.username,
           thread_url: conv.thread_url,
           messages: conv.messages,
+          label: conv.label,
         }))
       );
       return;
@@ -90,6 +92,7 @@ export const fetchMessages = async (
       data.conversations.map((conv) => ({
         name: conv.username,
         messages: conv.messages,
+        label: conv.label,
       }))
     );
   } catch (err) {
