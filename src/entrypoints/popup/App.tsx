@@ -44,7 +44,7 @@ const App = () => {
   }, [chats, selectedChat]);
 
   return (
-    <div className="app-container">
+    <div className="app-container min-w-[400px]">
       {selectedChat ? (
         <ChatComponent
           chat={selectedChat}

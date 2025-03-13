@@ -1,4 +1,5 @@
 import { defineConfig } from "wxt";
+import tailwindcss from "@tailwindcss/vite";
 
 // // wxt.config.ts
 // export default defineConfig({
@@ -11,4 +12,7 @@ export default defineConfig({
     permissions: ["cookies"],
     host_permissions: ["*://*.linkedin.com/*"],
   },
+  vite: () => ({
+    plugins: [tailwindcss()],
+  }),
 });
