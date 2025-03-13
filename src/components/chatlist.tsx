@@ -6,13 +6,14 @@ interface Chat {
   name: string;
   thread_url: string;
   messages: string[];
-  label: string; // Optional label property
+  label: string;
 }
 
 interface ChatListProps {
   onSelectChat: (chat: Chat) => void;
   chats: Chat[];
   hardRefresh: () => void;
+  onSettingsClick: () => void;
 }
 
 const MAX_MESSAGE_LENGTH = 30;
@@ -49,6 +50,7 @@ const ChatList: React.FC<ChatListProps> = ({
   onSelectChat,
   chats,
   hardRefresh,
+  onSettingsClick,
 }) => {
   // State for dropdown filter (normalized)
   const [filterLabel, setFilterLabel] = useState<string>("all");
@@ -81,7 +83,10 @@ const ChatList: React.FC<ChatListProps> = ({
         </select>
 
         {/* Settings Button */}
-        <button className="text-gray-500 hover:text-indigo-600 focus:outline-none">
+        <button
+          className="text-gray-500 hover:text-indigo-600 focus:outline-none"
+          onClick={onSettingsClick} // Open settings page
+        >
           <FiSettings size={20} />
         </button>
       </div>
