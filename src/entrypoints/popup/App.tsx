@@ -55,7 +55,7 @@ const App = () => {
           {loading && <LoadingScreen />}
           {error && (
             <ErrorScreen
-              message={error}
+              message={error || ""}
               retryFunction={() => loadMessages(true)} // Force refresh
             />
           )}

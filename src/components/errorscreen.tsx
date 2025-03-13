@@ -1,10 +1,9 @@
 "use client";
 
-import type React from "react";
-import "./stylesheets/errorscreen.css";
+import React from "react";
 
 interface ErrorScreenProps {
-  message: string;
+  message: string | null;
   retryFunction: () => void;
 }
 
@@ -13,10 +12,20 @@ const ErrorScreen: React.FC<ErrorScreenProps> = ({
   retryFunction,
 }) => {
   return (
-    <div className="error-container">
-      <h2 className="error-title">Unable to Load Messages</h2>
-      <p className="error-message">{message}</p>
-      <button onClick={retryFunction} className="retry-button">
+    <div className="flex flex-col items-center justify-center w-full bg-gray-50 p-4 min-h-screen">
+      {/* Error Title */}
+      <h2 className="text-2xl font-bold text-gray-800 mb-3">
+        Unable to Load Messages
+      </h2>
+
+      {/* Error Message */}
+      <p className="text-gray-600 text-center mb-6">{message}</p>
+
+      {/* Retry Button */}
+      <button
+        className="px-6 py-3 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200"
+        onClick={retryFunction}
+      >
         Try Again
       </button>
     </div>
