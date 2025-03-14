@@ -1,20 +1,76 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { fetchLabels } from "@/utils/fetchlabels";
 
 interface SettingsPageProps {
   onClose: () => void; // Callback to close settings
 }
 
+const DEFAULT_LABELS = [
+  "spam",
+  "conversation",
+  "greeting",
+  "internship",
+  "job",
+  "other",
+];
+
 const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
   const [apiKey, setApiKey] = useState<string>("");
   const [customLabel, setCustomLabel] = useState<string>("");
   const [customMessage, setCustomMessage] = useState<string>("");
+  const [availableLabels, setAvailableLabels] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const handleSubmit = () => {
-    console.log("API Key:", apiKey);
-    console.log("Custom Label:", customLabel);
-    console.log("Custom Message:", customMessage);
+  // Fetch labels on component mount
+  useEffect(() => {
+    const loadLabels = async () => {
+      try {
+        const labels = await fetchLabels();
+        setAvailableLabels(labels);
+      } catch (err) {
+        console.error("Error fetching labels:", err);
+        setAvailableLabels(DEFAULT_LABELS); // Fallback to default labels
+      }
+    };
+    loadLabels();
+  }, []);
+
+  // Handle form submission for creating custom labels
+  const handleSubmit = async () => {
+    setError(null);
+    setSuccess(null);
+
+    if (!customLabel.trim()) {
+      setError("Label cannot be empty");
+      return;
+    }
+
+    try {
+      // Simulate POST request to create label
+      await fetch("http://127.0.0.1:8000/api/create-label/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: customLabel.trim(),
+          description: customMessage.trim(),
+        }),
+      });
+
+      setSuccess(`Label "${customLabel}" created successfully`);
+      setCustomLabel(""); // Clear the label input
+      setCustomMessage(""); // Clear the message input
+
+      // Refresh the list of available labels
+      const updatedLabels = await fetchLabels();
+      setAvailableLabels(updatedLabels);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred"
+      );
+    }
   };
 
   return (
@@ -55,7 +111,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
           htmlFor="custom-label"
           className="block text-sm font-medium text-gray-700 mb-2"
         >
-          Custom Label
+          Create Custom Label
         </label>
         <div className="space-y-4">
           {/* Label Input */}
@@ -67,7 +123,6 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
             placeholder="Internship"
             className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 transition duration-200"
           />
-
           {/* Textarea */}
           <div>
             <textarea
@@ -85,6 +140,30 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
           </div>
         </div>
       </div>
+
+      {/* Available Labels Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Available Labels
+        </label>
+        <div className="space-y-2">
+          {availableLabels.map((label, index) => {
+            return (
+              <div key={index} className="flex items-center space-x-2">
+                <div
+                  className={`px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700`}
+                >
+                  {label.charAt(0).toUpperCase() + label.slice(1)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Error or Success Messages */}
+      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+      {success && <p className="text-green-500 text-sm mb-4">{success}</p>}
 
       {/* Save Button */}
       <button

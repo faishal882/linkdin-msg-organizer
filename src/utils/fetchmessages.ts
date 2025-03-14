@@ -37,7 +37,12 @@ const saveToCache = (data: ApiResponse) => {
 // Updated fetchMessages function
 export const fetchMessages = async (
   setChats: (
-    chats: { name: string; thread_url: string; messages: string[]; label: string }[]
+    chats: {
+      name: string;
+      thread_url: string;
+      messages: string[];
+      label: string;
+    }[]
   ) => void,
   setError: (error: string) => void,
   setLoading: (loading: boolean) => void,
@@ -74,11 +79,14 @@ export const fetchMessages = async (
       path: cookie.path,
     }));
 
-    const response = await fetch("http://127.0.0.1:8000/api/scrape-messages/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cookies: cookieData }),
-    });
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/classify-messages/",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cookies: cookieData }),
+      }
+    );
 
     if (!response.ok) {
       const errorData: ApiResponse = await response.json();
