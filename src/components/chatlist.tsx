@@ -96,38 +96,44 @@ const ChatList: React.FC<ChatListProps> = ({
 
       {/* Chat List Items */}
       {filteredChats && filteredChats.length > 0 ? (
-        filteredChats.map((chat, index) => (
-          <div
-            key={index}
-            className="flex items-center p-3 bg-white rounded-lg shadow-sm mb-2 cursor-pointer hover:bg-gray-100 transition duration-200"
-            onClick={() => onSelectChat(chat)}
-          >
-            {/* Chat Icon */}
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-lg mr-3">
-              {chat.name.charAt(0).toUpperCase()}
-            </div>
+        filteredChats.map(
+          (chat, index) =>
+            chat.messages.length > 0 && (
+              <div
+                key={index}
+                className="flex items-center p-3 bg-white rounded-lg shadow-sm mb-2 cursor-pointer hover:bg-gray-100 transition duration-200"
+                onClick={() => onSelectChat(chat)}
+              >
+                {/* Chat Icon */}
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-lg mr-3">
+                  {chat.name.charAt(0).toUpperCase()}
+                </div>
 
-            {/* Chat Info */}
-            <div className="flex-grow ml-3">
-              <div className="flex justify-between items-center">
-                <span className="font-medium text-gray-800">{chat.name}</span>
-                {/* Label Box */}
-                {chat.label && (
-                  <div
-                    className={`px-2 py-1 rounded-md text-xs font-medium ${
-                      getLabelColor(chat.label).bg
-                    } ${getLabelColor(chat.label).text}`}
-                  >
-                    {chat.label.charAt(0).toUpperCase() + chat.label.slice(1)}
+                {/* Chat Info */}
+                <div className="flex-grow ml-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-gray-800">
+                      {chat.name}
+                    </span>
+                    {/* Label Box */}
+                    {chat.label && (
+                      <div
+                        className={`px-2 py-1 rounded-md text-xs font-medium ${
+                          getLabelColor(chat.label).bg
+                        } ${getLabelColor(chat.label).text}`}
+                      >
+                        {chat.label.charAt(0).toUpperCase() +
+                          chat.label.slice(1)}
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div className="text-sm text-gray-600">
+                    {truncateMessage(chat.messages[0] || "No messages yet")}
+                  </div>
+                </div>
               </div>
-              <div className="text-sm text-gray-600">
-                {truncateMessage(chat.messages[0] || "No messages yet")}
-              </div>
-            </div>
-          </div>
-        ))
+            )
+        )
       ) : (
         <div className="text-center text-gray-500 py-4">No messages found</div>
       )}

@@ -29,6 +29,9 @@ const App = () => {
     "messages"
   );
 
+  // Check if Gemini API key exists in localStorage
+  const geminiApiKey = localStorage.getItem("geminiApiKey");
+
   // Function to load messages with optional force refresh
   const loadMessages = async (force = false) => {
     setError(null);
@@ -41,7 +44,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    loadMessages();
+    if (geminiApiKey) loadMessages();
   }, []);
 
   // Reset selectedChat if chats array changes and selectedChat is no longer valid
@@ -102,7 +105,9 @@ const App = () => {
 
       {/* Content Area */}
       <div className="flex-grow p-2 bg-gray-50 min-h-screen">
-        {selectedChat ? (
+        {!geminiApiKey ? (
+          <SettingsPage />
+        ) : selectedChat ? (
           <ChatComponent
             chat={selectedChat}
             goBack={() => setSelectedChat(null)}
@@ -128,10 +133,10 @@ const App = () => {
                     hardRefresh={() => loadMessages(true)}
                   />
                 )}
-                {activeTab === "spam" && <SpamList />}
-                {activeTab === "settings" && <SettingsPage />}
               </>
             )}
+            {activeTab === "spam" && <SpamList />}
+            {activeTab === "settings" && <SettingsPage />}
           </>
         )}
       </div>
