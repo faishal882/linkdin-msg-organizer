@@ -82,6 +82,7 @@ const SettingsPage: React.FC<SettingsPageProps> = () => {
         body: JSON.stringify({
           name: customLabel.trim(),
           description: customMessage.trim(),
+          api_key: localStorage.getItem("geminiApiKey"),
         }),
       });
       setSuccess(`Label "${customLabel}" created successfully`);
