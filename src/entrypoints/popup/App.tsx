@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import ChatComponent from "@/components/chat";
 import ChatList from "@/components/chatlist";
+import SpamList from "@/components/spamlist";
 import SettingsPage from "@/components/settings";
 import LoadingScreen from "@/components/loadingscreen";
 import ErrorScreen from "@/components/errorscreen";
@@ -127,7 +128,7 @@ const App = () => {
                     hardRefresh={() => loadMessages(true)}
                   />
                 )}
-                {/* {activeTab === "spam" && <SpamList />} */}
+                {activeTab === "spam" && <SpamList />}
                 {activeTab === "settings" && <SettingsPage />}
               </>
             )}
