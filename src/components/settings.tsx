@@ -1,11 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { FaArrowLeft } from "react-icons/fa";
 import { fetchLabels } from "@/utils/fetchlabels";
-
-interface SettingsPageProps {
-  onClose: () => void; // Callback to close settings
-}
 
 const DEFAULT_LABELS = [
   "spam",
@@ -16,7 +11,7 @@ const DEFAULT_LABELS = [
   "other",
 ];
 
-const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
+const SettingsPage: React.FC = () => {
   const [apiKey, setApiKey] = useState<string>("");
   const [customLabel, setCustomLabel] = useState<string>("");
   const [customMessage, setCustomMessage] = useState<string>("");
@@ -42,15 +37,12 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
   const handleSubmit = async () => {
     setError(null);
     setSuccess(null);
-
     if (!customLabel.trim()) {
       setError("Label cannot be empty");
       return;
     }
-
     try {
-      // Simulate POST request to create label
-      await fetch("http://127.0.0.1:8000/api/create-label/", {
+      const response = await fetch("http://127.0.0.1:8000/api/create-label/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -58,7 +50,9 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
           description: customMessage.trim(),
         }),
       });
-
+      if (!response.ok) {
+        throw new Error("Failed to create label");
+      }
       setSuccess(`Label "${customLabel}" created successfully`);
       setCustomLabel(""); // Clear the label input
       setCustomMessage(""); // Clear the message input
@@ -76,14 +70,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
   return (
     <div className="flex flex-col w-full bg-gray-50 p-4 min-h-[500px]">
       {/* Header Section */}
-      <div className="flex items-center mb-4 border-b border-gray-200 pb-4">
-        {/* Back Button */}
-        <button
-          className="text-gray-600 hover:text-indigo-600 focus:outline-none mr-3"
-          onClick={onClose} // Close settings page
-        >
-          <FaArrowLeft size={18} />
-        </button>
+      <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-4">
         <h2 className="text-lg font-medium text-gray-800">Settings</h2>
       </div>
 
@@ -105,7 +92,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
         />
       </div>
 
-      {/* Custom Label Section */}
+      {/* Custom Label Creation Section */}
       <div className="mb-6">
         <label
           htmlFor="custom-label"
@@ -139,6 +126,16 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
             </p>
           </div>
         </div>
+        {/* Save Button */}
+        <button
+          onClick={handleSubmit}
+          className="mt-4 w-full py-2 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200"
+        >
+          Save Label
+        </button>
+        {/* Error or Success Messages */}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        {success && <p className="text-green-500 text-sm mt-2">{success}</p>}
       </div>
 
       {/* Available Labels Section */}
@@ -146,32 +143,17 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ onClose }) => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Available Labels
         </label>
-        <div className="space-y-2">
-          {availableLabels.map((label, index) => {
-            return (
-              <div key={index} className="flex items-center space-x-2">
-                <div
-                  className={`px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700`}
-                >
-                  {label.charAt(0).toUpperCase() + label.slice(1)}
-                </div>
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-2 gap-2">
+          {availableLabels.map((label, index) => (
+            <div
+              key={index}
+              className={`px-3 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 text-center`}
+            >
+              {label.charAt(0).toUpperCase() + label.slice(1)}
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* Error or Success Messages */}
-      {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-      {success && <p className="text-green-500 text-sm mb-4">{success}</p>}
-
-      {/* Save Button */}
-      <button
-        onClick={handleSubmit}
-        className="mt-auto w-full py-3 bg-indigo-500 text-white font-medium rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200"
-      >
-        Save Changes
-      </button>
     </div>
   );
 };
